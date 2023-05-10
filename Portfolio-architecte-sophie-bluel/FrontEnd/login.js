@@ -1,77 +1,87 @@
-
+ 
 
     const loginForm = document.createElement("form");  
 
     const usernameLabel = document.createElement("label");
     const usernameLabelText = document.createTextNode("E-mail ");
-          usernameLabel.appendChild(usernameLabelText);
-          usernameLabel.appendChild(document.createElement("br"));
+    usernameLabel.appendChild(usernameLabelText);
+    usernameLabel.appendChild(document.createElement("br"));
 
     const usernameInput = document.createElement("input");
-          usernameInput.type = "text";
-          usernameInput.id = "username";
-          usernameInput.name = "username";
-          usernameInput.required = true; 
-          usernameLabel.appendChild(usernameInput);
-          loginForm.appendChild(usernameLabel);
-          loginForm.appendChild(document.createElement("br"));
+    usernameInput.type = "text";
+    usernameInput.id = "username";
+    usernameInput.name = "username";
+    usernameInput.required = true; 
+    usernameLabel.appendChild(usernameInput);
+    loginForm.appendChild(usernameLabel);
+    loginForm.appendChild(document.createElement("br"));
 
 
     const passwordLabel = document.createElement("label"); 
     const passwordLabelText = document.createTextNode("Mot de passe ");
-          passwordLabel.appendChild(passwordLabelText);
-          passwordLabel.appendChild(document.createElement("br"));
+    passwordLabel.appendChild(passwordLabelText);
+    passwordLabel.appendChild(document.createElement("br"));
 
     const passwordInput = document.createElement("input");
-          passwordInput.type = "password";
-          passwordInput.id = "password";
-          passwordInput.name = "passord";
-          passwordInput.required = true; 
-          passwordLabel.appendChild(passwordInput);
-          loginForm.appendChild(passwordLabel);
-          loginForm.appendChild(document.createElement("br"));
+    passwordInput.type = "password";
+    passwordInput.id = "password";
+    passwordInput.name = "password";
+    passwordInput.required = true; 
+    passwordLabel.appendChild(passwordInput);
+    loginForm.appendChild(passwordLabel);
+    loginForm.appendChild(document.createElement("br"));
 
-    const submitButton = document.createElement("button")
-    const submitButtonText = document.createTextNode("Se connecter");
-          submitButton.appendChild(submitButtonText);
-          submitButton.onclick = async function () {
-                const username = document.getElementById("username").value; 
-                const password = document.getElementById("password").value;
+    const submitButton = document.createElement("input");
+    submitButton.type = "submit";
+    submitButton.value = "Se connecter";
 
-                if ( username == "" || password == "") {
-                    alert ("Merci de renseigner les deux champs");
-                    return false;
-                }
+loginForm.addEventListener('submit', async function (event) {
+    event.preventDefault();
+    const username = document.getElementById("username").value; 
+    const password = document.getElementById("password").value;
 
-                try {
-                    const data = {
-                        email: username,
-                        password: password
-                    };
+    if ( username == "" || password == "") {
+        alert ("Merci de renseigner les deux champs");
+        return false;
+    } 
 
-                    const response = await fetch("http://localhost:5678/api/users/login", {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(data)
-                    });
+    try {
+        const data = {
+            email: username,
+            password: password
+        };
 
-                    const { token } = await response.json();
+        const response = await fetch("http://localhost:5678/api/users/login", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
 
-                    if (response.ok) {
-                        localStorage.setItem('token', token);
-                        alert('Connexion réussie');
-                        
-                    } else {
-                        alert('Nom d\'utilisateur ou mot de passe incorrect');
-                    }
-                } catch (error) {
-                    console.error(error);
-                }
+        const { token } = await response.json();
 
-                return false;
-            };
+        if (response.ok) {
+            localStorage.setItem('token', token);
+            alert('Connexion réussie');
+           // window.location.replace('index.html');
+        } else {
+            alert('Nom d\'utilisateur ou mot de passe incorrect');
+        }
+      
+        if(localStorage.getItem('token')){
+          
+            window.location.href = "index.html";
+        }  
+  
+    } catch (error) {
+        console.error(error);
+    }
 
-    loginForm.appendChild(submitButton); 
-    document.body.appendChild(loginForm);
+ 
+});
+
+
+loginForm.appendChild(submitButton); 
+document.body.appendChild(loginForm);
+
