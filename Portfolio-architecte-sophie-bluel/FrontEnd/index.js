@@ -4,6 +4,7 @@
         
         const api = "http://localhost:5678/api/";
         let currentCategoryId = null;
+        let token = localStorage.getItem('token');
 
         async function fetchWork() {
         try {
@@ -37,6 +38,7 @@
                 sectionCards.appendChild(workFigure);
                 }
         }
+        console.log(works);
         }
 
         async function fetchCategories() {
@@ -50,6 +52,10 @@
         }
 
         function loadFilters(categories) {
+               
+                if (token != null) {
+                        return false ; 
+                }else{
                 const buttonSection = document.querySelector(".btn.filter");
                 buttonSection.innerHTML = "";
 
@@ -74,6 +80,7 @@
                 buttonSection.appendChild(btn);
         }
         }
+}
 
         async function fetchWorksByCategory(categoryId) {
         try {
@@ -85,9 +92,55 @@
         }
         }
 
+        
+        function displayHandband() {
+                const header = document.querySelector('header');
+               // let token = localStorage.getItem('token');
+                if (token != null) {
+                  const bandeau = document.createElement('div');
+                  bandeau.classList.add('bandeau-gestion');
+              
+                  
+                  const boutonEdition = document.createElement('button');
+                  boutonEdition.innerText = 'Mode édition';
+                  bandeau.appendChild(boutonEdition);
+              
+                 
+                  const boutonPublier = document.createElement('button');
+                  boutonPublier.innerText = 'Publier les changements';
+                  bandeau.appendChild(boutonPublier);
+              
+
+                  header.prepend(bandeau);
+                }
+              }
+  
+
+                        function displayButtonMod() {
+                        const portfolio = document.querySelector("#portfolio");
+                        if (token != null) {
+                        const title = portfolio.querySelector("h2");
+                        const titleWrapper = document.createElement("div");
+                        titleWrapper.classList.add("title-wrapper");
+                        portfolio.insertBefore(titleWrapper, title);
+                        titleWrapper.appendChild(title);
+
+                        const travMod = document.createElement("button");
+                        travMod.innerText = "Modifier";
+                        titleWrapper.appendChild(travMod);
+                        } else {
+                        return false;
+                        }
+                        }
+
+              // localStorage.clear();
+                 
+
             function run() {
             fetchWork();
             fetchCategories();
+            displayHandband();
+            displayButtonMod();
             }
 
             run();
